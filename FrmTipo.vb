@@ -1,9 +1,6 @@
-﻿Imports System.Data.SqlClient
 Imports GGeral
-Imports GGeral.ListaeCombo
 Imports TratamentoDeErros
 Imports xAlimento
-Imports xAlimento.xMsgBox
 
 Public Class FrmTipo
 
@@ -20,7 +17,9 @@ Public Class FrmTipo
 6:      Return _Instance
     End Function
     Private Sub InstanciaDispose(sender As Object, e As FormClosedEventArgs) Handles Me.FormClosed
+
 7:      _Instance.Dispose()
+
     End Sub
 
 #End Region
@@ -31,6 +30,16 @@ Public Class FrmTipo
 #End Region
 
 #Region "Funções"
+
+    Private Enum EnModo
+        Nenhum
+        Inclusao
+        Alteracao
+        Exclusao
+    End Enum
+
+    Private ModoAtual As EnModo = EnModo.Nenhum
+
     Private Sub ConfigurarGrid()
 
         FlxTabelaSelecao.Cols(1).TextAlign = C1.Win.C1FlexGrid.TextAlignEnum.CenterCenter
@@ -258,18 +267,10 @@ Public Class FrmTipo
 
 #Region "Formulários"
 
-    Private Enum EnModo
-        Nenhum
-        Inclusao
-        Alteracao
-        Exclusao
-    End Enum
-
-    Private ModoAtual As EnModo = EnModo.Nenhum
-
     Private Sub FrmTipo_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
 132:    Try
+
 133:        EstadoInicial()
 134:        CarregarDados()
 
@@ -460,7 +461,10 @@ Public Class FrmTipo
 235:        End If
 
             ' Se a linha selecionada for válida 
-236:        If FlxTabelaSelecao.Row >= FlxTabelaSelecao.Rows.Fixed Then
+            If ModoAtual = EnModo.Inclusao Or ModoAtual = EnModo.Alteracao Then
+
+            ElseIf FlxTabelaSelecao.Row >= FlxTabelaSelecao.Rows.Fixed Then
+
 237:            BtnAlterar.Enabled = True
 238:            BtnExcluir.Enabled = True
 239:        Else
