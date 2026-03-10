@@ -8,42 +8,42 @@ Public Class FrmIncluirPessoa
 
     Private Sub New()
 
-        Try
+1:      Try
 
-            InitializeComponent()
+2:          InitializeComponent()
 
-        Catch ex As Exception
-            Erro.Tratar(ex, Erl.ToString)
-        End Try
+3:      Catch ex As Exception
+4:          Erro.Tratar(ex, Erl.ToString)
+5:      End Try
 
     End Sub
 
     Private Shared _Instance As FrmIncluirPessoa = Nothing
     Public Shared Function Instance() As FrmIncluirPessoa
 
-        Try
+6:      Try
 
-            If _Instance Is Nothing OrElse _Instance.IsDisposed Then
-                _Instance = New FrmIncluirPessoa
-            End If
-            _Instance.BringToFront()
+7:          If _Instance Is Nothing OrElse _Instance.IsDisposed Then
+8:              _Instance = New FrmIncluirPessoa
+9:          End If
+10:         _Instance.BringToFront()
 
-        Catch ex As Exception
-            Erro.Tratar(ex, Erl.ToString)
-        End Try
-        Return _Instance
+11:     Catch ex As Exception
+12:         Erro.Tratar(ex, Erl.ToString)
+13:     End Try
+14:     Return _Instance
 
     End Function
 
     Private Sub InstanciaDispose(sender As Object, e As FormClosedEventArgs) Handles Me.FormClosed
 
-        Try
+15:     Try
 
-7:          _Instance.Dispose()
+16:         _Instance = Instance()
 
-        Catch ex As Exception
-            Erro.Tratar(ex, Erl.ToString)
-        End Try
+17:     Catch ex As Exception
+18:         Erro.Tratar(ex, Erl.ToString)
+19:     End Try
     End Sub
 
 #End Region
@@ -72,95 +72,106 @@ Public Class FrmIncluirPessoa
 
     Public Sub BindPessoa(dt As DataTable)
 
-        TxtNome.DataBindings.Clear()
-        TxtCpf.DataBindings.Clear()
-        TxtTelefone.DataBindings.Clear()
-        TxtEmail.DataBindings.Clear()
-        TxtEndereco.DataBindings.Clear()
+20:     Try
 
-        TxtNome.DataBindings.Add("Text", dt, "Nome")
-        TxtCpf.DataBindings.Add("Text", dt, "Cpf")
-        TxtTelefone.DataBindings.Add("Text", dt, "Telefone")
-        TxtEmail.DataBindings.Add("Text", dt, "Email")
-        TxtEndereco.DataBindings.Add("Text", dt, "Endereco")
+21:         TxtNome.DataBindings.Clear()
+22:         TxtCpf.DataBindings.Clear()
+23:         TxtTelefone.DataBindings.Clear()
+24:         TxtEmail.DataBindings.Clear()
+25:         TxtEndereco.DataBindings.Clear()
+26:         TxtDataNascimento.DataBindings.Clear()
+27:         TxtEntrada.DataBindings.Clear()
+28:         CmbTipo.DataBindings.Clear()
 
-        TxtDataNascimento.DataBindings.Add("Value", dt, "DataNascimento")
-        TxtEntrada.DataBindings.Add("Value", dt, "DataEntrada")
+29:         TxtNome.DataBindings.Add("Text", dt, "Nome")
+30:         TxtCpf.DataBindings.Add("Text", dt, "Cpf")
+31:         TxtTelefone.DataBindings.Add("Text", dt, "Telefone")
+32:         TxtEmail.DataBindings.Add("Text", dt, "Email")
+33:         TxtEndereco.DataBindings.Add("Text", dt, "Endereco")
 
-        'aqui abaixo está a funcao que puxa o id e mostra la na tela de alteracao junto com a outra cmbtipo
-        '==================================================================================================
-        Dim idTipo As Integer = Convert.ToInt32(dt.Rows(0)("IdTipo"))
+34:         TxtDataNascimento.DataBindings.Add("Value", dt, "DataNascimento")
+35:         TxtEntrada.DataBindings.Add("Value", dt, "DataEntrada")
 
-        Dim index As Integer = ListaIdTipo.IndexOf(idTipo)
+            'aqui abaixo está a funcao que puxa o id e mostra la na tela de alteracao junto com a outra cmbtipo
+            '==================================================================================================
+36:         Dim idTipo As Integer = Convert.ToInt32(dt.Rows(0)("IdTipo"))
 
-        If index >= 0 Then
-            CmbTipo.SelectedIndex = index
-        End If
-        '===================================================================================================
-        'Logica para puxar a situacao quando clica em alterar
-        Dim situacao As Integer
-        situacao = dt.Rows(0)("Situacao")
+37:         Dim index As Integer = ListaIdTipo.IndexOf(idTipo)
 
-        If situacao = 1 Then
-            CmbSituacao.Text = "Ativo"
-        Else
-            CmbSituacao.Text = "Inativo"
-        End If
+38:         If index >= 0 Then
+39:             CmbTipo.SelectedIndex = index
+40:         End If
+            '===================================================================================================
+            'Logica para puxar a situacao quando clica em alterar
+41:         Dim situacao As Integer
+42:         situacao = dt.Rows(0)("Situacao")
 
-        'Logica para puxar a foto quando clica em alterar
-        If Not String.IsNullOrEmpty(dt.Rows(0)("Foto").ToString()) Then
-            CaminhoFoto = dt.Rows(0)("Foto").ToString
-            PctFotoPerfil.Image = Image.FromFile(dt.Rows(0)("Foto").ToString)
-        Else
-            PctFotoPerfil.Image = Nothing
-        End If
+43:         If situacao = 1 Then
+44:             CmbSituacao.Text = "ATIVO"
+45:         Else
+46:             CmbSituacao.Text = "INATIVO"
+47:         End If
+
+            'Logica para puxar a foto quando clica em alterar
+48:         If Not String.IsNullOrEmpty(dt.Rows(0)("Foto").ToString()) Then
+49:             CaminhoFoto = dt.Rows(0)("Foto").ToString
+50:             PctFotoPerfil.Image = Image.FromFile(dt.Rows(0)("Foto").ToString)
+51:         Else
+52:             PctFotoPerfil.Image = Nothing
+53:         End If
+
+
+
+54:     Catch ex As Exception
+55:         Erro.Tratar(ex, Erl.ToString)
+56:     End Try
 
     End Sub
 
     Public Sub CarregarDados()
 
-        Try
+57:     Try
 
-            Dim SelectPessoa As String
-            Dim Conexao As New ConexaoSQL
-            Dim drdSQL As DataTable
+58:         Dim SelectPessoa As String
+59:         Dim Conexao As New ConexaoSQL
+60:         Dim drdSQL As DataTable
 
             SelectPessoa = "SELECT IdPessoa, Nome, Cpf, DataNascimento, Telefone, Email, DataCadastro, IdTipo, Endereco, DataEntrada, DataSaida, IdLiberacao, Observacao, Situacao, Foto
                             FROM IvanControleDeAcesso.dbo.Pessoa
                             WHERE IdPessoa = " & IdPessoaSelecionada
 
-            drdSQL = Conexao.RetornaDT(SelectPessoa, ConexaoSQL.EnBanco.Azul)
+61:         drdSQL = Conexao.RetornaDT(SelectPessoa, ConexaoSQL.EnBanco.Azul)
 
-            TxtDataNascimento.Value = Convert.ToDateTime(drdSQL.Rows(0)("DataNascimento"))
+62:         TxtDataNascimento.Value = Convert.ToDateTime(drdSQL.Rows(0)("DataNascimento"))
 
-            If ModoAtual = EnModo.Alteracao Then
+63:         If ModoAtual = EnModo.Alteracao Then
 
-                If drdSQL.Rows.Count > 0 Then
+64:             If drdSQL.Rows.Count > 0 Then
 
-                    BindPessoa(drdSQL)
+65:                 BindPessoa(drdSQL)
 
                     'VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
-                    If IsDBNull(drdSQL.Rows(0)("DataSaida")) Then
-                        TxtSaida.Value = Nothing
-                    Else
-                        TxtSaida.Value = Convert.ToDateTime(drdSQL.Rows(0)("DataSaida"))
-                    End If
+66:                 If IsDBNull(drdSQL.Rows(0)("DataSaida")) Then
+67:                     TxtSaida.Value = Nothing
+68:                 Else
+69:                     TxtSaida.Value = Convert.ToDateTime(drdSQL.Rows(0)("DataSaida"))
+70:                 End If
 
 
-                End If
-            End If
+71:             End If
+72:         End If
 
-        Catch ex As Exception
-            Erro.Tratar(ex, Erl.ToString)
-        End Try
+73:     Catch ex As Exception
+74:         Erro.Tratar(ex, Erl.ToString)
+75:     End Try
 
     End Sub
 
     Private Sub InserirDados()
 
-        Try
+76:     Try
 
-            If String.IsNullOrWhiteSpace(TxtNome.Text) OrElse
+77:         If String.IsNullOrWhiteSpace(TxtNome.Text) OrElse
                 String.IsNullOrWhiteSpace(TxtCpf.Text) OrElse
                     String.IsNullOrWhiteSpace(TxtDataNascimento.Text) OrElse
                     String.IsNullOrWhiteSpace(TxtTelefone.Text) OrElse
@@ -169,75 +180,76 @@ Public Class FrmIncluirPessoa
                     String.IsNullOrWhiteSpace(CmbLiberacao.Text) OrElse
                     String.IsNullOrWhiteSpace(CmbSituacao.Text) Then
 
-                LblNomePessoa.ForeColor = Color.Red
-                LblCpf.ForeColor = Color.Red
-                LblDataNascimento.ForeColor = Color.Red
-                LblTelefone.ForeColor = Color.Red
-                LblDataEntrada.ForeColor = Color.Red
-                LblTipo.ForeColor = Color.Red
-                LblLiberacao.ForeColor = Color.Red
-                LblSituacao.ForeColor = Color.Red
-                LblSituacao.ForeColor = Color.Red
-                MsgBox("Preencha todos os campos obrigatórios.", MsgBoxStyle.Exclamation, "Atenção")
-            Else
+78:             LblNomePessoa.ForeColor = Color.Red
+79:             LblCpf.ForeColor = Color.Red
+80:             LblDataNascimento.ForeColor = Color.Red
+81:             LblTelefone.ForeColor = Color.Red
+82:             LblDataEntrada.ForeColor = Color.Red
+83:             LblTipo.ForeColor = Color.Red
+84:             LblLiberacao.ForeColor = Color.Red
+85:             LblSituacao.ForeColor = Color.Red
+86:             LblSituacao.ForeColor = Color.Red
+87:             MsgBox("Preencha todos os campos obrigatórios.", MsgBoxStyle.Exclamation, "Atenção")
+88:         Else
 
-                Dim StrSQL As String
-                Dim Conexao As New ConexaoSQL
+89:             Dim StrSQL As String
+90:             Dim Conexao As New ConexaoSQL
 
-                If CmbSituacao.Text = "ATIVO" Then
-                    CmbSituacao.Text = "1"
-                End If
+91:             Dim Situacao As Integer
 
-                If CmbSituacao.Text = "INATIVO" Then
-                    CmbSituacao.Text = "0"
-                End If
+92:             If CmbSituacao.Text = "ATIVO" Then
+93:                 Situacao = 1
+94:             End If
 
-                If CmbLiberacao.Text = "LIBERADO" Then
-                    CmbLiberacao.Text = "1"
-                End If
+95:             If CmbSituacao.Text = "INATIVO" Then
+96:                 Situacao = 0
+97:             End If
 
-                If CmbLiberacao.Text = "BLOQUEADO" Then
-                    CmbLiberacao.Text = "0"
-                End If
+98:             If CmbLiberacao.Text = "LIBERADO" Then
+99:                 CmbLiberacao.Text = "1"
+100:            End If
 
+101:            If CmbLiberacao.Text = "BLOQUEADO" Then
+102:                CmbLiberacao.Text = "0"
+103:            End If
 
                 'Validar essa função abaixo '
-                Dim DataSaidaSQL As String
+104:            Dim DataSaidaSQL As String
 
-                If TxtSaida.Value Is Nothing OrElse IsDBNull(TxtSaida.Value) Then
-                    DataSaidaSQL = "NULL"
-                Else
-                    DataSaidaSQL = "'" & CDate(TxtSaida.Value).ToString("dd-MM-yyyy") & "'"
-                End If
+105:            If TxtSaida.Value Is Nothing OrElse IsDBNull(TxtSaida.Value) Then
+106:                DataSaidaSQL = "NULL"
+107:            Else
+108:                DataSaidaSQL = "'" & CDate(TxtSaida.Value).ToString("dd-MM-yyyy") & "'"
+109:            End If
 
 
 
-                StrSQL = "INSERT INTO IvanControleDeAcesso.dbo.Pessoa (Nome, Cpf, DataNascimento, Telefone, Email, DataCadastro, IdTipo, 
+110:            StrSQL = "INSERT INTO IvanControleDeAcesso.dbo.Pessoa (Nome, Cpf, DataNascimento, Telefone, Email, DataCadastro, IdTipo, 
                                       Endereco, DataEntrada, DataSaida, IdLiberacao, Situacao, Observacao, Foto)
                   VALUES ('" & TxtNome.Text & "', '" & TxtCpf.Text & "', '" & TxtDataNascimento.Text & "', '" & TxtTelefone.Text & "' ,'" & TxtEmail.Text & "', 
                   GETDATE(),'" & ListaIdTipo(CmbTipo.SelectedIndex) & "', '" & TxtEndereco.Text & "', '" & TxtEntrada.Text & "', " & DataSaidaSQL & ", '" & CmbLiberacao.Text & "',
-                  '" & CmbSituacao.Text & "', '" & TxtObservacao.Text & "', '" & CaminhoFoto & "')"
+                  '" & Situacao & "', '" & TxtObservacao.Text & "', '" & CaminhoFoto & "')"
 
-                Conexao.ExecutaStr(StrSQL, ConexaoSQL.EnBanco.Azul)
+111:            Conexao.ExecutaStr(StrSQL, ConexaoSQL.EnBanco.Azul)
 
-                FrmSelecionarPessoa.Instance().CarregarDados()
+112:            FrmSelecionarPessoa.Instance().CarregarDados()
 
-                LimparCampos()
-                CaminhoFoto = ""
-                Me.Close()
+113:            LimparCampos()
+114:            CaminhoFoto = ""
+115:            Me.Close()
 
-            End If
+116:        End If
 
-        Catch ex As Exception
-            Erro.Tratar(ex, Erl.ToString)
-        End Try
+117:    Catch ex As Exception
+118:        Erro.Tratar(ex, Erl.ToString)
+119:    End Try
 
     End Sub
 
     Private Sub AtualizarDados()
 
-        Try
-            If String.IsNullOrWhiteSpace(TxtNome.Text) OrElse
+120:    Try
+121:        If String.IsNullOrWhiteSpace(TxtNome.Text) OrElse
                 String.IsNullOrWhiteSpace(TxtCpf.Text) OrElse
                     String.IsNullOrWhiteSpace(TxtDataNascimento.Text) OrElse
                     String.IsNullOrWhiteSpace(TxtTelefone.Text) OrElse
@@ -246,43 +258,43 @@ Public Class FrmIncluirPessoa
                     String.IsNullOrWhiteSpace(CmbLiberacao.Text) OrElse
                     String.IsNullOrWhiteSpace(CmbSituacao.Text) Then
 
-                LblNomePessoa.ForeColor = Color.Red
-                LblCpf.ForeColor = Color.Red
-                LblDataNascimento.ForeColor = Color.Red
-                LblTelefone.ForeColor = Color.Red
-                LblDataEntrada.ForeColor = Color.Red
-                LblTipo.ForeColor = Color.Red
-                LblLiberacao.ForeColor = Color.Red
-                LblSituacao.ForeColor = Color.Red
-                LblSituacao.ForeColor = Color.Red
-                MsgBox("Preencha todos os campos obrigatórios.", MsgBoxStyle.Exclamation, "Atenção")
-            Else
-                Dim StrSQL As String
-                Dim Conexao As New ConexaoSQL
-                Dim situacao As Integer
+122:            LblNomePessoa.ForeColor = Color.Red
+123:            LblCpf.ForeColor = Color.Red
+124:            LblDataNascimento.ForeColor = Color.Red
+125:            LblTelefone.ForeColor = Color.Red
+126:            LblDataEntrada.ForeColor = Color.Red
+127:            LblTipo.ForeColor = Color.Red
+128:            LblLiberacao.ForeColor = Color.Red
+129:            LblSituacao.ForeColor = Color.Red
+130:            LblSituacao.ForeColor = Color.Red
+131:            MsgBox("Preencha todos os campos obrigatórios.", MsgBoxStyle.Exclamation, "Atenção")
+132:        Else
+133:            Dim StrSQL As String
+134:            Dim Conexao As New ConexaoSQL
+135:            Dim situacao As Integer
 
-                If CmbSituacao.Text = "ATIVO" Then
+136:            If CmbSituacao.Text = "ATIVO" Then
 
-                    situacao = 1
+137:                situacao = 1
 
-                ElseIf CmbSituacao.Text = "INATIVO" Then
+138:            ElseIf CmbSituacao.Text = "INATIVO" Then
 
-                    situacao = 0
+139:                situacao = 0
 
-                End If
+140:            End If
 
 
                 'validar essa funcao abaixo
 
-                Dim DataSaidaSQL As String
+141:            Dim DataSaidaSQL As String
 
-                If TxtSaida.Value Is Nothing OrElse IsDBNull(TxtSaida.Value) Then
-                    DataSaidaSQL = "NULL"
-                Else
-                    DataSaidaSQL = "'" & CDate(TxtSaida.Value).ToString("dd-MM-yyyy") & "'"
-                End If
+142:            If TxtSaida.Value Is Nothing OrElse IsDBNull(TxtSaida.Value) Then
+143:                DataSaidaSQL = "NULL"
+144:            Else
+145:                DataSaidaSQL = "'" & CDate(TxtSaida.Value).ToString("dd-MM-yyyy") & "'"
+146:            End If
 
-                StrSQL = "UPDATE IvanControleDeAcesso.dbo.Pessoa SET Nome = '" & TxtNome.Text & "', Cpf = '" & TxtCpf.Text & "', DataNascimento = '" & TxtDataNascimento.Text & "',
+147:            StrSQL = "UPDATE IvanControleDeAcesso.dbo.Pessoa SET Nome = '" & TxtNome.Text & "', Cpf = '" & TxtCpf.Text & "', DataNascimento = '" & TxtDataNascimento.Text & "',
                   Telefone = '" & TxtTelefone.Text & "', Email = '" & TxtEmail.Text & "', IdTipo = '" & ListaIdTipo(CmbTipo.SelectedIndex) & "', Endereco = '" & TxtEndereco.Text & "',
                   DataEntrada = '" & TxtEntrada.Text & "', DataSaida = " & DataSaidaSQL & ", IdLiberacao = '" & CmbLiberacao.Text & "',
                   Situacao = " & situacao & ", Observacao = '" & TxtObservacao.Text & "', Foto = '" & CaminhoFoto & "'  WHERE IdPessoa = " & IdPessoaSelecionada
@@ -294,63 +306,63 @@ Public Class FrmIncluirPessoa
                 LimparCampos()
                 CaminhoFoto = ""
 
-                Me.Close()
-            End If
-        Catch ex As Exception
-            Erro.Tratar(ex, Erl.ToString)
-        End Try
+148:            Me.Close()
+149:        End If
+150:    Catch ex As Exception
+151:        Erro.Tratar(ex, Erl.ToString)
+152:    End Try
     End Sub
 
     Private Sub LimparCampos()
 
-        Try
+153:    Try
 
-            TxtNome.Text = String.Empty
-            TxtCpf.Text = String.Empty
-            TxtDataNascimento.Value = Nothing
-            TxtTelefone.Text = String.Empty
-            TxtEmail.Text = String.Empty
-            CmbTipo.Text = ""
-            TxtEndereco.Text = String.Empty
-            TxtEntrada.Value = Nothing
-            TxtSaida.Value = Nothing
-            CmbLiberacao.Text = ""
-            CmbSituacao.Text = ""
-            TxtObservacao.Text = String.Empty
+154:        TxtNome.Text = String.Empty
+155:        TxtCpf.Text = String.Empty
+156:        TxtDataNascimento.Value = Nothing
+157:        TxtTelefone.Text = String.Empty
+158:        TxtEmail.Text = String.Empty
+159:        CmbTipo.Text = ""
+160:        TxtEndereco.Text = String.Empty
+161:        TxtEntrada.Value = Nothing
+162:        TxtSaida.Value = Nothing
+163:        CmbLiberacao.Text = ""
+164:        CmbSituacao.Text = ""
+165:        TxtObservacao.Text = String.Empty
 
-        Catch ex As Exception
-            Erro.Tratar(ex, Erl.ToString)
-        End Try
+166:    Catch ex As Exception
+167:        Erro.Tratar(ex, Erl.ToString)
+168:    End Try
 
     End Sub
 
     Private Sub SelectCampos()
 
-        Try
+169:    Try
 
-            Dim SelectCodigo As String
-            Dim Conexao As New ConexaoSQL
-            Dim drdSQL As DataTable
+170:        Dim SelectCodigo As String
+171:        Dim Conexao As New ConexaoSQL
+172:        Dim drdSQL As DataTable
 
             SelectCodigo = "SELECT top 1 IdPessoa + 1 FROM IvanControleDeAcesso.dbo.Pessoa order by IdPessoa desc"
-            drdSQL = Conexao.RetornaDT(SelectCodigo, ConexaoSQL.EnBanco.Azul)
+173:        drdSQL = Conexao.RetornaDT(SelectCodigo, ConexaoSQL.EnBanco.Azul)
 
 
-            If drdSQL.Rows.Count > 0 Then
-                TxtCodigoPessoa.Text = drdSQL.Rows(0)(0).ToString
-            End If
+174:        If drdSQL.Rows.Count > 0 Then
+175:            TxtCodigoPessoa.Text = drdSQL.Rows(0)(0).ToString
+176:        End If
 
-            Dim SelectDataCadastro As String
-            Dim drdDataCadastro As DataTable
+177:        Dim SelectDataCadastro As String
+178:        Dim drdDataCadastro As DataTable
 
             SelectDataCadastro = "SELECT GETDATE()"
-            drdDataCadastro = Conexao.RetornaDT(SelectDataCadastro, ConexaoSQL.EnBanco.Azul)
+179:        drdDataCadastro = Conexao.RetornaDT(SelectDataCadastro, ConexaoSQL.EnBanco.Azul)
 
-            TxtDataCadastro.Text = drdDataCadastro.Rows(0)(0).ToString
+180:        TxtDataCadastro.Text = drdDataCadastro.Rows(0)(0).ToString
 
-        Catch ex As Exception
-            Erro.Tratar(ex, Erl.ToString)
-        End Try
+181:    Catch ex As Exception
+182:        Erro.Tratar(ex, Erl.ToString)
+183:    End Try
 
     End Sub
 
@@ -358,28 +370,31 @@ Public Class FrmIncluirPessoa
     'FUNCAO IMPORTANTE - REVISAR PARA ENTENDER - ELA ESTÁ FAZENDO A RELACAO ENTRE TIPO ()
     Private Sub CarregarTipo()
 
-        Dim Conexao As New ConexaoSQL
-        Dim Dt As DataTable
+184:    Try
 
-        Dt = Conexao.RetornaDT("SELECT IdTipo, Tipo FROM IvanControleDeAcesso.dbo.TipoPessoa", ConexaoSQL.EnBanco.Azul)
+185:        Dim Conexao As New ConexaoSQL
+186:        Dim Dt As DataTable
 
-        CmbTipo.Items.Clear()
-        ListaIdTipo.Clear()
+187:        Dt = Conexao.RetornaDT("SELECT IdTipo, Tipo FROM IvanControleDeAcesso.dbo.TipoPessoa", ConexaoSQL.EnBanco.Azul)
 
-        For Each linha As DataRow In Dt.Rows
+188:        CmbTipo.Items.Clear()
+189:        ListaIdTipo.Clear()
 
-            CmbTipo.Items.Add(linha("Tipo").ToString)
-            ListaIdTipo.Add(Convert.ToInt32(linha("IdTipo")))
+190:        For Each linha As DataRow In Dt.Rows
 
-        Next
+191:            CmbTipo.Items.Add(linha("Tipo").ToString)
+192:            ListaIdTipo.Add(Convert.ToInt32(linha("IdTipo")))
+
+193:        Next
+
+
+
+194:    Catch ex As Exception
+195:        Erro.Tratar(ex, Erl.ToString)
+196:    End Try
 
     End Sub
 
-    Private Sub ValidarCampos()
-
-        'If TxtCodigoPessoa
-
-    End Sub
 
 #End Region
 
@@ -387,85 +402,85 @@ Public Class FrmIncluirPessoa
 
     Private Sub FrmIncluirPessoa_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        Try
-            If ModoAtual = EnModo.Alteracao Then
-                Me.Text = "Alterar Pessoa"
-            End If
+197:    Try
+198:        If ModoAtual = EnModo.Alteracao Then
+199:            Me.Text = "Alterar Pessoa"
+200:        End If
 
-            CmbSituacao.Items.Add("ATIVO")
-            CmbSituacao.Items.Add("INATIVO")
-            CmbLiberacao.Items.Add("LIBERADO")
-            CmbLiberacao.Items.Add("BLOQUEADO")
+201:        CmbSituacao.Items.Add("ATIVO")
+202:        CmbSituacao.Items.Add("INATIVO")
+203:        CmbLiberacao.Items.Add("LIBERADO")
+204:        CmbLiberacao.Items.Add("BLOQUEADO")
 
             SelectCampos()
-            CarregarTipo()
+205:        CarregarTipo()
 
-            CmbTipo.SelectedIndex = -1
-            CmbSituacao.SelectedIndex = -1
+206:        CmbTipo.SelectedIndex = -1
+207:        CmbSituacao.SelectedIndex = -1
 
-            If ModoAtual = EnModo.Alteracao Then
-                TxtCodigoPessoa.Text = IdPessoaSelecionada.ToString
-            End If
+208:        If ModoAtual = EnModo.Alteracao Then
+209:            TxtCodigoPessoa.Text = IdPessoaSelecionada.ToString
+210:        End If
 
 
-        Catch ex As Exception
-            Erro.Tratar(ex, Erl.ToString)
-        End Try
+211:    Catch ex As Exception
+212:        Erro.Tratar(ex, Erl.ToString)
+213:    End Try
 
     End Sub
 
     Private Sub BtnGravar_Click(sender As Object, e As EventArgs) Handles BtnGravar.Click
 
-        Try
+214:    Try
 
-            If ModoAtual = EnModo.Alteracao Then
+215:        If ModoAtual = EnModo.Alteracao Then
 
-                AtualizarDados()
+216:            AtualizarDados()
 
-            End If
+217:        End If
 
-            If ModoAtual = EnModo.Inclusao Then
+218:        If ModoAtual = EnModo.Inclusao Then
 
-                InserirDados()
+219:            InserirDados()
 
-            End If
+220:        End If
 
-        Catch ex As Exception
-            Erro.Tratar(ex, Erl.ToString)
-        End Try
+221:    Catch ex As Exception
+222:        Erro.Tratar(ex, Erl.ToString)
+223:    End Try
 
     End Sub
 
     Private Sub BtnVoltar_Click(sender As Object, e As EventArgs) Handles BtnVoltar.Click
 
-        Try
+224:    Try
 
-            Me.Close()
+225:        Me.Close()
 
-        Catch ex As Exception
-            Erro.Tratar(ex, Erl.ToString)
-        End Try
+226:    Catch ex As Exception
+227:        Erro.Tratar(ex, Erl.ToString)
+228:    End Try
 
     End Sub
 
     Private Sub BtnSelecionarFoto_Click_1(sender As Object, e As EventArgs) Handles BtnSelecionarFoto.Click
 
-        Try
+229:    Try
 
-            Dim dialogo As New OpenFileDialog
+230:        Dim dialogo As New OpenFileDialog
 
-            dialogo.Filter = "Imagens|*.jpg;*.png;*.jpeg"
+231:        dialogo.Filter = "Imagens|*.jpg;*.png;*.jpeg"
 
-            If dialogo.ShowDialog = DialogResult.OK Then
+232:        If dialogo.ShowDialog = DialogResult.OK Then
 
-                CaminhoFoto = dialogo.FileName
-                PctFotoPerfil.Image = Image.FromFile(CaminhoFoto)
+233:            CaminhoFoto = dialogo.FileName
+234:            PctFotoPerfil.Image = Image.FromFile(CaminhoFoto)
 
-            End If
+235:        End If
 
-        Catch ex As Exception
-            Erro.Tratar(ex, Erl.ToString)
-        End Try
+236:    Catch ex As Exception
+237:        Erro.Tratar(ex, Erl.ToString)
+238:    End Try
 
     End Sub
 
