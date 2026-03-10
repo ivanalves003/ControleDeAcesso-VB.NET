@@ -9,11 +9,11 @@ Public Class FrmSelecionarPessoa
 
     Private Sub New()
 
-        Try
-            InitializeComponent()
-        Catch ex As Exception
-            Erro.Tratar(ex, Erl.ToString)
-        End Try
+1:      Try
+2:          InitializeComponent()
+3:      Catch ex As Exception
+4:          Erro.Tratar(ex, Erl.ToString)
+5:      End Try
 
     End Sub
 
@@ -21,29 +21,29 @@ Public Class FrmSelecionarPessoa
 
     Public Shared Function Instance() As FrmSelecionarPessoa
 
-        Try
+6:      Try
 
-            If _Instance Is Nothing OrElse _Instance.IsDisposed Then
-                _Instance = New FrmSelecionarPessoa
-            End If
-            _Instance.BringToFront()
+7:          If _Instance Is Nothing OrElse _Instance.IsDisposed Then
+8:              _Instance = New FrmSelecionarPessoa
+9:          End If
+10:         _Instance.BringToFront()
 
-        Catch ex As Exception
-            Erro.Tratar(ex, Erl.ToString)
-        End Try
-        Return _Instance
+11:     Catch ex As Exception
+12:         Erro.Tratar(ex, Erl.ToString)
+13:     End Try
+14:     Return _Instance
 
     End Function
 
     Private Sub InstanciaDispose(sender As Object, e As FormClosedEventArgs) Handles Me.FormClosed
 
-        Try
+15:     Try
 
-            _Instance.Dispose()
+16:         _Instance.Dispose()
 
-        Catch ex As Exception
-            Erro.Tratar(ex, Erl.ToString)
-        End Try
+17:     Catch ex As Exception
+18:         Erro.Tratar(ex, Erl.ToString)
+19:     End Try
 
     End Sub
 
@@ -86,34 +86,34 @@ Public Class FrmSelecionarPessoa
     'Realiza Consulta no banco
     Public Sub CarregarDados()
 
-        Try
+20:     Try
 
-            Dim StrSQL As String
-            Dim DrdSQL As SqlDataReader
-            Dim Conexao As New ConexaoSQL
-            Dim StrFiltro As String = ""
+21:         Dim StrSQL As String
+22:         Dim DrdSQL As SqlDataReader
+23:         Dim Conexao As New ConexaoSQL
+24:         Dim StrFiltro As String = ""
 
             'Filtro de situação
-            If SituacaoAtual = Situacao.Ativo Then
-                StrFiltro &= " AND Situacao = 1"
-            ElseIf SituacaoAtual = Situacao.Inativo Then
-                StrFiltro &= " AND Situacao = 0"
-            End If
+25:         If SituacaoAtual = Situacao.Ativo Then
+26:             StrFiltro &= " AND Situacao = 1"
+27:         ElseIf SituacaoAtual = Situacao.Inativo Then
+28:             StrFiltro &= " AND Situacao = 0"
+29:         End If
 
             'Filtros de busca
-            If TxtCodigoPessoa.Text <> "" Then
-                StrFiltro &= " AND IdPessoa LIKE '" & TxtCodigoPessoa.Text & "%'"
-            End If
+30:         If TxtCodigoPessoa.Text <> "" Then
+31:             StrFiltro &= " AND IdPessoa LIKE '" & TxtCodigoPessoa.Text & "%'"
+32:         End If
 
-            If TxtNome.Text <> "" Then
-                StrFiltro &= " AND Nome LIKE '" & TxtNome.Text & "%'"
-            End If
+33:         If TxtNome.Text <> "" Then
+34:             StrFiltro &= " AND Nome LIKE '" & TxtNome.Text & "%'"
+35:         End If
 
-            If TxtCpf.Text <> "" Then
-                StrFiltro &= " AND Cpf LIKE '" & TxtCpf.Text & "%'"
-            End If
+36:         If TxtCpf.Text <> "" Then
+37:             StrFiltro &= " AND Cpf LIKE '" & TxtCpf.Text & "%'"
+38:         End If
 
-            StrSQL = "SELECT 
+39:         StrSQL = "SELECT 
                     P.IdPessoa,
                     P.Nome,
                     P.Cpf,
@@ -136,14 +136,14 @@ Public Class FrmSelecionarPessoa
                     ON P.IdTipo = T.IdTipo
                     WHERE P.IdPessoa > 0 " & StrFiltro
 
-            DrdSQL = Conexao.RetornaDR(StrSQL, ConexaoSQL.EnBanco.Azul)
-            FlxTabelaSelecao.RemoveRows()
+40:         DrdSQL = Conexao.RetornaDR(StrSQL, ConexaoSQL.EnBanco.Azul)
+41:         FlxTabelaSelecao.RemoveRows()
 
-            If DrdSQL IsNot Nothing Then
+42:         If DrdSQL IsNot Nothing Then
 
-                Do While DrdSQL.Read()
+43:             Do While DrdSQL.Read()
 
-                    FlxTabelaSelecao.AddItem(
+44:                 FlxTabelaSelecao.AddItem(
                     DrdSQL("IdPessoa") & vbTab &
                     DrdSQL("Nome") & vbTab &
                     DrdSQL("Cpf") & vbTab &
@@ -160,48 +160,48 @@ Public Class FrmSelecionarPessoa
                     DrdSQL("Observacao")
                 )
 
-                Loop
+45:             Loop
 
-            End If
-            FlxTabelaSelecao.Row = -1
+46:         End If
+47:         FlxTabelaSelecao.Row = -1
 
-        Catch ex As Exception
-            Erro.Tratar(ex, Erl.ToString)
-        End Try
+48:     Catch ex As Exception
+49:         Erro.Tratar(ex, Erl.ToString)
+50:     End Try
 
     End Sub
 
     'Realiza exclusão lógica no banco
     Private Sub ExcluirPessoa()
 
-        Try
+51:     Try
 
-            Dim Conexao As New ConexaoSQL
-            Dim StrSQL As String
-            Dim Resposta As DialogResult
+52:         Dim Conexao As New ConexaoSQL
+53:         Dim StrSQL As String
+54:         Dim Resposta As DialogResult
 
-            If FlxTabelaSelecao.Row > 0 Then
+55:         If FlxTabelaSelecao.Row > 0 Then
 
-                Resposta = MessageBox.Show("Deseja excluir a pessoa selecionada?",
+56:             Resposta = MessageBox.Show("Deseja excluir a pessoa selecionada?",
                                        "Confirmação",
                                        MessageBoxButtons.YesNo,
                                        MessageBoxIcon.Question)
 
 
-                If Resposta = DialogResult.Yes Then
+57:             If Resposta = DialogResult.Yes Then
 
-                    StrSQL = "DELETE FROM IvanControleDeAcesso.dbo.Pessoa WHERE IdPessoa = " & FlxTabelaSelecao(FlxTabelaSelecao.RowSel, 0) & ";"
-                    Conexao.RetornaDR(StrSQL, ConexaoSQL.EnBanco.Azul)
-                    CarregarDados()
+58:                 StrSQL = "DELETE FROM IvanControleDeAcesso.dbo.Pessoa WHERE IdPessoa = " & FlxTabelaSelecao(FlxTabelaSelecao.RowSel, 0) & ";"
+59:                 Conexao.RetornaDR(StrSQL, ConexaoSQL.EnBanco.Azul)
+60:                 CarregarDados()
 
-                End If
-            Else MsgBox("Selecione um item para poder excluir.")
-            End If
+61:             End If
+62:         Else MsgBox("Selecione um item para poder excluir.")
+63:         End If
 
 
-        Catch ex As Exception
-            Erro.Tratar(ex, Erl.ToString)
-        End Try
+64:     Catch ex As Exception
+65:         Erro.Tratar(ex, Erl.ToString)
+66:     End Try
     End Sub
 
 #End Region
@@ -210,201 +210,204 @@ Public Class FrmSelecionarPessoa
 
     Private Sub FrmSelecionarPessoa_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        Try
+67:     Try
 
-            CarregarDados()
+68:         CarregarDados()
 
-        Catch ex As Exception
-            Erro.Tratar(ex, Erl.ToString)
-        End Try
+69:     Catch ex As Exception
+70:         Erro.Tratar(ex, Erl.ToString)
+71:     End Try
     End Sub
 
     'SELECIONAR
     Private Sub BtnSelecionar_Click(sender As Object, e As EventArgs) Handles BtnSelecionar.Click
 
-        Try
+72:     Try
 
-            CarregarDados()
+73:         CarregarDados()
 
-        Catch ex As Exception
-            Erro.Tratar(ex, Erl.ToString)
-        End Try
+74:     Catch ex As Exception
+75:         Erro.Tratar(ex, Erl.ToString)
+76:     End Try
     End Sub
 
     'INCLUIR
     Private Sub BtnIncluir_Click(sender As Object, e As EventArgs) Handles BtnIncluir.Click
 
-        Try
+77:     Try
 
-            FrmIncluirPessoa.Instance().ModoAtual = FrmIncluirPessoa.EnModo.Inclusao
-            FrmIncluirPessoa.Instance.Show()
+78:         FrmIncluirPessoa.Instance().ModoAtual = FrmIncluirPessoa.EnModo.Inclusao
+79:         FrmIncluirPessoa.Instance.Show()
 
-        Catch ex As Exception
-            Erro.Tratar(ex, Erl.ToString)
-        End Try
+80:     Catch ex As Exception
+81:         Erro.Tratar(ex, Erl.ToString)
+82:     End Try
 
     End Sub
 
     'ALTERAR
     Private Sub BtnAlterar_Click(sender As Object, e As EventArgs) Handles BtnAlterar.Click
 
-        Try
+83:     Try
 
-            If FlxTabelaSelecao.Row <= 0 Then
+84:         If FlxTabelaSelecao.Row <= 0 Then
 
-                MsgBox("Selecione um item para poder alterar.")
+85:             MsgBox("Selecione um item para poder alterar.")
 
-            Else
-                Dim ID As Integer = FlxTabelaSelecao(FlxTabelaSelecao.RowSel, 0)
-                FrmIncluirPessoa.Instance().IdPessoaSelecionada = ID
-                FrmIncluirPessoa.Instance().ModoAtual = FrmIncluirPessoa.EnModo.Alteracao
-                FrmIncluirPessoa.Instance.Show()
-                FrmIncluirPessoa.Instance.CarregarDados()
-            End If
+86:         Else
+87:             Dim ID As Integer = FlxTabelaSelecao(FlxTabelaSelecao.RowSel, 0)
+88:             FrmIncluirPessoa.Instance().IdPessoaSelecionada = ID
+89:             FrmIncluirPessoa.Instance().ModoAtual = FrmIncluirPessoa.EnModo.Alteracao
+                'FrmIncluirPessoa.Instance.Show()
+                'FrmIncluirPessoa.Instance.CarregarDados()
+90:             Dim frm = FrmIncluirPessoa.Instance()
+91:             frm.Show()
+92:             frm.CarregarDados()
+93:         End If
 
 
-        Catch ex As Exception
-            Erro.Tratar(ex, Erl.ToString)
-        End Try
+94:     Catch ex As Exception
+95:         Erro.Tratar(ex, Erl.ToString)
+96:     End Try
 
     End Sub
 
     'EXCLUIR
     Private Sub BtnExcluir_Click(sender As Object, e As EventArgs) Handles BtnExcluir.Click
 
-        Try
+97:     Try
 
-            ExcluirPessoa()
+98:         ExcluirPessoa()
 
-        Catch ex As Exception
-            Erro.Tratar(ex, Erl.ToString)
-        End Try
+99:     Catch ex As Exception
+100:        Erro.Tratar(ex, Erl.ToString)
+101:    End Try
 
     End Sub
 
     'VOLTAR
     Private Sub BtnVoltar_Click(sender As Object, e As EventArgs) Handles BtnVoltar.Click
 
-        Try
-            If ModoAtual = EnModo.Nenhum Then
+102:    Try
+103:        If ModoAtual = EnModo.Nenhum Then
 
-                Me.Close()
+104:            Me.Close()
 
-            Else
+105:        Else
 
-                Dim resposta As DialogResult
+106:            Dim resposta As DialogResult
 
-                resposta = MessageBox.Show("Deseja cancelar a operação?",
+107:            resposta = MessageBox.Show("Deseja cancelar a operação?",
                                    "Confirmação",
                                    MessageBoxButtons.YesNo,
                                    MessageBoxIcon.Question)
 
-                If resposta = DialogResult.Yes Then
+108:            If resposta = DialogResult.Yes Then
 
-                    Me.Close()
+109:                Me.Close()
 
-                End If
-            End If
+110:            End If
+111:        End If
 
-        Catch ex As Exception
-            Erro.Tratar(ex, Erl.ToString)
-        End Try
+112:    Catch ex As Exception
+113:        Erro.Tratar(ex, Erl.ToString)
+114:    End Try
 
     End Sub
 
     'Filtro de situação ATIVO
     Private Sub OptSituacao_CheckedChanged(sender As Object, e As EventArgs) Handles OptAtivo.CheckedChanged
 
-        Try
+115:    Try
 
-            SituacaoAtual = Situacao.Ativo
-            CarregarDados()
+116:        SituacaoAtual = Situacao.Ativo
+117:        CarregarDados()
 
 
-        Catch ex As Exception
-            Erro.Tratar(ex, Erl.ToString)
-        End Try
+118:    Catch ex As Exception
+119:        Erro.Tratar(ex, Erl.ToString)
+120:    End Try
 
     End Sub
 
     'Filtro de situação INATIVO
     Private Sub OptInativo_CheckedChanged(sender As Object, e As EventArgs) Handles OptInativo.CheckedChanged
 
-        Try
+121:    Try
 
-            SituacaoAtual = Situacao.Inativo
-            CarregarDados()
+122:        SituacaoAtual = Situacao.Inativo
+123:        CarregarDados()
 
 
-        Catch ex As Exception
-            Erro.Tratar(ex, Erl.ToString)
-        End Try
+124:    Catch ex As Exception
+125:        Erro.Tratar(ex, Erl.ToString)
+126:    End Try
 
     End Sub
 
     'Filtro de situação TODOS
     Private Sub OptTodos_CheckedChanged(sender As Object, e As EventArgs) Handles OptTodos.CheckedChanged
 
-        Try
+127:    Try
 
-            SituacaoAtual = Situacao.Todos
-            CarregarDados()
+128:        SituacaoAtual = Situacao.Todos
+129:        CarregarDados()
 
 
-        Catch ex As Exception
-            Erro.Tratar(ex, Erl.ToString)
-        End Try
+130:    Catch ex As Exception
+131:        Erro.Tratar(ex, Erl.ToString)
+132:    End Try
 
     End Sub
 
     'Filtro que puxa as fotos quando clica no Grid
     Public Sub FlxTabelaSelecao_AfterRowColChange(sender As Object, e As RangeEventArgs) Handles FlxTabelaSelecao.AfterRowColChange
 
-        FlxTabelaSelecao.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.Row
-        FlxTabelaSelecao.FocusRect = C1.Win.C1FlexGrid.FocusRectEnum.None
-        Try
+133:    Try
+134:        FlxTabelaSelecao.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.Row
+135:        FlxTabelaSelecao.FocusRect = C1.Win.C1FlexGrid.FocusRectEnum.None
             'Estudar essa funcao aqui
-            If FlxTabelaSelecao.Row <= 0 Then
-                PctFotoPerfil.Image = Nothing
+136:        If FlxTabelaSelecao.Row <= 0 Then
+137:            PctFotoPerfil.Image = Nothing
 
-            Else
+138:        Else
 
-                Dim StrSQL As String
-                Dim Conexao As New ConexaoSQL
-                Dim DtSQL As DataTable
-                Dim CaminhoFoto As String
-                Dim IdPessoa As Integer = FlxTabelaSelecao(FlxTabelaSelecao.RowSel, 0)
+139:            Dim StrSQL As String
+140:            Dim Conexao As New ConexaoSQL
+141:            Dim DtSQL As DataTable
+142:            Dim CaminhoFoto As String
+143:            Dim IdPessoa As Integer = FlxTabelaSelecao(FlxTabelaSelecao.RowSel, 0)
 
-                StrSQL = "SELECT Foto FROM IvanControleDeAcesso.dbo.Pessoa WHERE IdPessoa = " & IdPessoa
+144:            StrSQL = "SELECT Foto FROM IvanControleDeAcesso.dbo.Pessoa WHERE IdPessoa = " & IdPessoa
 
-                DtSQL = Conexao.RetornaDT(StrSQL, ConexaoSQL.EnBanco.Azul)
+145:            DtSQL = Conexao.RetornaDT(StrSQL, ConexaoSQL.EnBanco.Azul)
 
-                If DtSQL IsNot Nothing AndAlso DtSQL.Rows.Count > 0 Then
+146:            If DtSQL IsNot Nothing AndAlso DtSQL.Rows.Count > 0 Then
 
-                    CaminhoFoto = DtSQL.Rows(0)("Foto").ToString
+147:                CaminhoFoto = DtSQL.Rows(0)("Foto").ToString
 
                     'Libera a imagem anterior da memória
-                    If PctFotoPerfil.Image IsNot Nothing Then
-                        PctFotoPerfil.Image.Dispose()
-                        PctFotoPerfil.Image = Nothing
-                    End If
+148:                If PctFotoPerfil.Image IsNot Nothing Then
+149:                    PctFotoPerfil.Image.Dispose()
+150:                    PctFotoPerfil.Image = Nothing
+151:                End If
 
-                    If CaminhoFoto <> "" AndAlso IO.File.Exists(CaminhoFoto) Then
+152:                If CaminhoFoto <> "" AndAlso IO.File.Exists(CaminhoFoto) Then
 
                         'Carrega imagem sem travar o arquivo
-                        Using fs As New IO.FileStream(CaminhoFoto, IO.FileMode.Open, IO.FileAccess.Read)
-                            PctFotoPerfil.Image = Image.FromStream(fs)
-                        End Using
+153:                    Using fs As New IO.FileStream(CaminhoFoto, IO.FileMode.Open, IO.FileAccess.Read)
+154:                        PctFotoPerfil.Image = Image.FromStream(fs)
+155:                    End Using
 
-                    End If
+156:                End If
 
-                End If
+157:            End If
 
-            End If
+158:        End If
 
-        Catch ex As Exception
-            Erro.Tratar(ex, Erl.ToString)
-        End Try
+159:    Catch ex As Exception
+160:        Erro.Tratar(ex, Erl.ToString)
+161:    End Try
 
     End Sub
 
